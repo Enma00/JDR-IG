@@ -1,5 +1,17 @@
 import random
 import tkinter as tk
+import ennemis
+
+def ennemiHit ():
+        global ENNEMI, HERO, SKIP
+        Ennemi_hit = random.randint(ENNEMI["degats"] -5, ENNEMI["degats"] +5)
+        HERO -= Ennemi_hit
+        text_box.insert(tk.END, f"{ENNEMI['nom']} vous a infligé {Ennemi_hit} points de dégats ! \n")
+        text_box.insert(tk.END, f"Il vous reste {HERO} points de vie.\n")
+        if HERO <= 0:
+            text_box.insert(tk.END, "Tu as perdu !\n")
+            attaquer_button.config(state="disabled")
+            potion_button.config(state="disabled")
 
 # Attaquer
 def attaquer():
@@ -8,6 +20,7 @@ def attaquer():
     if SKIP:
         text_box.insert(tk.END, "Vous passez votre tour\n")
         SKIP = False
+        ennemiHit ()
     else: 
         Hit = random.randint(5,10)
         ENNEMI -= Hit
@@ -19,14 +32,7 @@ def attaquer():
             attaquer_button.config(state="disabled")
             potion_button.config(state="disabled")
         else:
-            Ennemi_hit = random.randint(5,15)
-            HERO -= Ennemi_hit
-            text_box.insert(tk.END, f"L'ennemi vous a infligé {Ennemi_hit} points de dégats ! \n")
-            text_box.insert(tk.END, f"Il vous reste {HERO} points de vie.\n")
-            if HERO <= 0:
-                text_box.insert(tk.END, "Tu as perdu !\n")
-                attaquer_button.config(state="disabled")
-                potion_button.config(state="disabled")
+            ennemiHit ()
             
     refresh_pv()
     text_box.see("end")
@@ -63,7 +69,7 @@ SKIP = False
 
 def restart_game():
     global ENNEMI, HERO, FLASK, SKIP
-    ENNEMI = 50
+    ENNEMI = random.choice(ennemis.ennemis_types)
     HERO = 50
     FLASK = 3
     SKIP = False
